@@ -1,8 +1,7 @@
 import * as React from 'react';
 import Dropzone from 'react-dropzone'
-import Loader from 'react-loader-spinner'
 import './App.css';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import CircularProgress from '@material-ui/core/CircularProgress';  
 
 interface IState {
     imageFiles: any[],
@@ -38,7 +37,7 @@ export default class App extends React.Component<{}, IState> {
     }
 
     public upload(base64String: string) {
-        fetch('https://danktrigger.azurewebsites.net/api/dank', {
+        fetch('https://jonokingdanknotdank.azurewebsites.net/api/dank', {
           method: 'POST',
           headers: {
             'Content-Type': 'text/plain',
