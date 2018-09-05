@@ -61,7 +61,7 @@ export default class App extends React.Component<{}, IState> {
         fetch('https://wordsapiv1.p.mashape.com/words/bump/also', {
           method: 'GET',
           headers: {
-            'Content-Type': 'text/plain',
+            'Content-Type': 'text/plain',  
             'X-Mashape-Key': 'venhULObjymsh2WWCQzEjbkpdSf1p12ULoWjsn05seHArOaUnz',
             'X-Mashape-Host': 'wordsapiv1.p.mashape.com'
           }
@@ -71,6 +71,7 @@ export default class App extends React.Component<{}, IState> {
             this.setState({results: response.statusText})
           }
           else {
+            
             response.json().then((data:any) => this.setState({results: "data[0][0]"}))
           }
         })
