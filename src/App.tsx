@@ -1,6 +1,6 @@
 import * as React from 'react';
-import Dropzone from 'react-dropzone'
 import './App.css';
+import Dropzone from 'react-dropzone'
 import CircularProgress from '@material-ui/core/CircularProgress';  
 
 interface IState {
@@ -17,7 +17,7 @@ export default class App extends React.Component<{}, IState> {
             this.state = {
             imageFiles: [],
             results: "",
-            dropzone: this.onDrop.bind(this)
+            dropzone: this.onDrop.bind(this),
         }
     }
 
@@ -37,7 +37,7 @@ export default class App extends React.Component<{}, IState> {
     }
 
     public upload(base64String: string) {
-        fetch('https://jonokingdanknotdank.azurewebsites.net/api/dank', {
+        fetch('https://danktrigger.azurewebsites.net/api/dank', {
           method: 'POST',
           headers: {
             'Content-Type': 'text/plain',
@@ -56,7 +56,26 @@ export default class App extends React.Component<{}, IState> {
           return response
         })
     }
-    
+
+    public define() {
+        fetch('https://wordsapiv1.p.mashape.com/words/bump/also', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'text/plain',
+            'X-Mashape-Key': 'venhULObjymsh2WWCQzEjbkpdSf1p12ULoWjsn05seHArOaUnz',
+            'X-Mashape-Host': 'wordsapiv1.p.mashape.com'
+          }
+        })
+        .then((response : any) => {
+          if (!response.ok) {
+            this.setState({results: response.statusText})
+          }
+          else {
+            response.json().then((data:any) => this.setState({results: "data[0][0]"}))
+          }
+        })
+    }
+
     public render() {
         return (
           <div className="container-fluid">
@@ -70,7 +89,7 @@ export default class App extends React.Component<{}, IState> {
                         <p>Try dropping some files here, or click to select files to upload.</p>
                     }  
                   </div>
-                </Dropzone>
+                </Dropzone> 
               </div>
               <div  className="dank">
               {
