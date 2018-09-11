@@ -1,11 +1,11 @@
 import * as React from 'react';
 import './App.css';
-import Dropzone from 'react-dropzone'
 import CircularProgress from '@material-ui/core/CircularProgress';  
 
 interface IState {
     imageFiles: any[],
     results: any,
+    value: any,
     dropzone: any
 }
 
@@ -13,12 +13,15 @@ interface IState {
 
 export default class App extends React.Component<{}, IState> {
     constructor(props: any) {
-        super(props)
+        super(props);
             this.state = {
             imageFiles: [],
             results: "",
+            value: "",
             dropzone: this.onDrop.bind(this),
         }
+        this.define = this.define.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     public onDrop(files: any) {
@@ -57,11 +60,13 @@ export default class App extends React.Component<{}, IState> {
         })
     }
 
-    public define() {
-        fetch('https://wordsapiv1.p.mashape.com/words/bump/also', {
+    public define(event:any) {
+        this.setState({value: event.target.value});
+        fetch('https://wordsapiv1.p.mashape.com/words/' + this.state.value , {
           method: 'GET',
           headers: {
-            'Content-Type': 'text/plain',  
+            'Content-Type':'text/plain',
+            'Accept': 'application/json',  
             'X-Mashape-Key': 'venhULObjymsh2WWCQzEjbkpdSf1p12ULoWjsn05seHArOaUnz',
             'X-Mashape-Host': 'wordsapiv1.p.mashape.com'
           }
@@ -71,30 +76,30 @@ export default class App extends React.Component<{}, IState> {
             this.setState({results: response.statusText})
           }
           else {
-            
-            response.json().then((data:any) => this.setState({results: "data[0][0]"}))
+            response.json().then((data:any) => this.setState({results: "Definition: " + data["results"][0]["definition"]}));
+           
+
+
           }
         })
+    }
+
+    handleChange(event:any) {
+      this.setState({value: event.target.value});
     }
 
     public render() {
         return (
           <div className="container-fluid">
             <div className="centreText">
-              <div className="dropZone">
-                <Dropzone onDrop={this.state.dropzone} style={{position: "relative"}}>
-                  <div style={{height: '50vh'}}>
-                    {
-                      this.state.imageFiles.length > 0 ? 
-                        <div>{this.state.imageFiles.map((file) => <img className="image" key={file.name} src={file.preview} /> )}</div> :
-                        <p>Try dropping some files here, or click to select files to upload.</p>
-                    }  
-                  </div>
-                </Dropzone> 
-              </div>
+                  Word:
+                  <input type="text" value={this.state.value} onChange={this.handleChange} />
+                  <button onClick={this.define}>
+                    Define
+                  </button>
               <div  className="dank">
               {
-                this.state.results === "" && this.state.imageFiles.length > 0 ?
+                this.state.results === ""?
                 <CircularProgress thickness={3} /> :
                 <p>{this.state.results}</p>
               }
