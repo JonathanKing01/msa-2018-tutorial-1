@@ -6,7 +6,7 @@ ENV APP_ENV $app_env
 
 RUN mkdir -p /msa-2018-tutorial-1
 WORKDIR /msa-2018-tutorial-1
-COPY ./msa-2018-tutorial-1 ./
+COPY ./msa-2018-tutorial-1 .
 
 RUN npm install
 

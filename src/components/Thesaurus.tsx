@@ -1,5 +1,5 @@
 import * as React from 'react';
-import './App.css';
+import '../App.css';
 import CircularProgress from '@material-ui/core/CircularProgress'; 
 import Grid from '@material-ui/core/Grid'; 
 import Paper from '@material-ui/core/Paper';
@@ -12,18 +12,17 @@ import TextField from '@material-ui/core/TextField';
 interface IState {
     imageFiles: any[],
     results: any,
-    synonyms: any,
     value: any,
     loading: any,
 }
 
 
-export default class App extends React.Component<{}, IState> {
+
+export default class FirstComponent extends React.Component<{}, IState> {
     constructor(props: any) {
         super(props);
             this.state = {
             imageFiles: [],
-            synonyms: "",
             results: "",
             value: "",
             loading: false,
@@ -31,6 +30,7 @@ export default class App extends React.Component<{}, IState> {
         this.define = this.define.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
+
 
     public upload(base64String: string) {
         fetch('https://danktrigger.azurewebsites.net/api/dank', {
@@ -72,7 +72,7 @@ export default class App extends React.Component<{}, IState> {
           }
           else {
             response.json().then((data:any) => this.setState({
-              results: "Definition: " + data["results"][0]["definition"]
+              results: "Synonym: " + data["results"][0]["synonyms"][0]
             }));
             this.setState({loading: false});
 
@@ -86,18 +86,17 @@ export default class App extends React.Component<{}, IState> {
     }
 
     public render() {
-
         return (
-          <div >
+        <div>
           <AppBar position="static">
-            <Toolbar>
-                  <Typography variant="display2" color="inherit">
-                    <Link style={{color: "white"}} to="/">Dictionary</Link>
-                    <Link to="/Thesaurus"> Thesaurus </Link>
+            <Toolbar className="titleBar">
+                  <Typography variant="display2">
+                    <Link style={{color: "#1B5E20"}} to="/">Dictionary</Link>
+                    <Link style={{color: "white"}} to="/Thesaurus"> Thesaurus </Link>
                   </Typography>
               </Toolbar>
           </AppBar>
-
+        
           <div className="centrePanel">
             <div className="centreText">
                   <div className="textField">
@@ -110,23 +109,19 @@ export default class App extends React.Component<{}, IState> {
                   />
                   </div>
                   <button onClick={this.define}>
-                    Define
+                    Search
                   </button>
-              <div  className="dank">
+              <div>
               {
                 this.state.loading===true?
                 <CircularProgress thickness={3} /> :
                 this.state.results===""?
-                <p>Enter a word to get a dictionary definition for</p> :
+                <p>Enter a word to get a synonym for</p> :
                 <p>
                   <Paper>
                     <Grid container wrap="nowrap" spacing={16} >
                       <Grid xs={12} sm container justify="center" alignItems="center">
-                        <Typography 
-                          variant="display1" gutterBottom 
-                          style={{ margin: 200 }}>
-                          {this.state.results}
-                        </Typography>
+                        <Typography variant="display1" style={{ margin: 180 }} gutterBottom>{this.state.results}</Typography>
                       </Grid>
                     </Grid>
                   </Paper>
